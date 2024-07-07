@@ -51,7 +51,6 @@ class Triangle(Figure):
         pass
 
     def get_square(self):
-        # Using Heron's formula
         a, b, c = self.get_sides()
         s = (a + b + c) / 2
         return (s * (s - a) * (s - b) * (s - c)) ** 0.5
@@ -73,6 +72,7 @@ class Cube(Figure):
 
 
 if __name__ == '__main__':
+    
     circle1 = Circle((200, 200, 100), radius=10)
     cube1 = Cube((222, 35, 130), 6)
 
@@ -88,3 +88,7 @@ if __name__ == '__main__':
 
     print(len(circle1))
     print(cube1.get_volume())
+
+
+
+
