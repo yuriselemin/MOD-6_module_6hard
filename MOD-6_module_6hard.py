@@ -1,59 +1,67 @@
+import math
+
+
 class Figure:
-    def __init__(self, sides_count=0, *args):
-        self.sides_count = sides_count
-        self.__sides = []
-        self.__color = []
+    def __init__(self, sides_count=0, color=(0, 0, 0)):
+        self._sides = []
+        self._color = color
         self.filled = False
+        self.sides_count = sides_count
 
     def get_color(self):
-        return self.__color
+        return self._color
 
-    def __is_valid_color(self, r, g, b):
+    def is_valid_color(self, r, g, b):
         return all(0 <= c <= 255 for c in (r, g, b))
 
     def set_color(self, r, g, b):
-        if self.__is_valid_color(r, g, b):
-            self.__color = [r, g, b]
+        if self.is_valid_color(r, g, b):
+            self._color = (r, g, b)
 
-    def is_valid_sides(self, *new_sides):
+    def _is_valid_sides(self, new_sides):
         return len(new_sides) == self.sides_count and all(side > 0 for side in new_sides)
 
     def get_sides(self):
-        return self.__sides
+        return self._sides
 
     def __len__(self):
-        pass
+        return sum(self._sides)
 
     def set_sides(self, *new_sides):
-        if self.is_valid_sides(*new_sides) and len(new_sides) == self.sides_count:
-            self.__sides = list(new_sides)
+        if not self._is_valid_sides(new_sides):
+            return
+        self._sides = list(new_sides)
 
 
 class Circle(Figure):
-    def __init__(self, *args, radius):
-        super().__init__(*args)
-        self.sides_count = 1
-        self.__radius = radius
-
-    def __len__(self):
-        return 2 * 3.14 * self.__radius
+    def __init__(self, color=(0, 0, 0), radius=0):
+        super().__init__(sides_count=1, color=color)
+        self._radius = radius
 
     def get_square(self):
-        return self.__radius ** 2 * 3.14
+        # Формула площади круга: π * r^2
+        return self._radius ** 2 * math.pi
+
+    def get_radius(self):
+        return self._radius
+
+    def set_radius(self, value):
+        self._radius = value
 
 
 class Triangle(Figure):
-    def __init__(self, *args):
-        super().__init__(*args)
-        self.sides_count = 3
+    def __init__(self, sides_count=3, color=(0, 0, 0)):
+        super().__init__(sides_count=sides_count, color=color)
+        self.__height = None
 
-    def __len__(self):
-        pass
+    def get_height(self):
+        return self.__height
+
+    def set_height(self, height):
+        self.__height = height
 
     def get_square(self):
-        a, b, c = self.get_sides()
-        s = (a + b + c) / 2
-        return (s * (s - a) * (s - b) * (s - c)) ** 0.5
+        return 0.5 * self.get_sides()[0] * self.__height
 
 
 class Cube(Figure):
@@ -63,7 +71,7 @@ class Cube(Figure):
         self.__sides = [sides] * self.sides_count
 
     def set_sides(self, *new_sides):
-        if self.is_valid_sides(*new_sides) and len(new_sides) == self.sides_count:
+        if self._is_valid_sides(new_sides) and len(new_sides) == self.sides_count:
             self.__sides = new_sides
 
     def get_volume(self):
@@ -72,7 +80,6 @@ class Cube(Figure):
 
 
 if __name__ == '__main__':
-    
     circle1 = Circle((200, 200, 100), radius=10)
     cube1 = Cube((222, 35, 130), 6)
 
@@ -88,7 +95,3 @@ if __name__ == '__main__':
 
     print(len(circle1))
     print(cube1.get_volume())
-
-
-
-
