@@ -39,7 +39,6 @@ class Circle(Figure):
         self._radius = radius
 
     def get_square(self):
-        # Формула площади круга: π * r^2
         return self._radius ** 2 * math.pi
 
     def get_radius(self):
